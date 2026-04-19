@@ -1,0 +1,77 @@
+Reparación de arranque UEFI (caso real)
+Problema
+En un equipo con Windows, al eliminar particiones manualmente, se generaron los siguientes síntomas:
+•	Menú de arranque con: 
+  o	Fedora 
+  o	Manjaro 
+  •	Solo iniciaba correctamente Windows 
+  •	Al intentar entrar a BIOS: 
+  o	Pantalla negra con un punto blanco (bloqueo) 
+________________________________________
+Diagnóstico
+1. Revisión de entradas UEFI
+Comando utilizado:
+bcdedit /enum firmware
+Resultado relevante:
+
+
+Estas entradas apuntaban a sistemas eliminados.
+2. Revisión de partición EFI
+Acceso:
+mountvol S: /S
+S:
+cd EFI
+dir
+Resultado:
+Manjaro
+fedora
+Microsoft
+Boot
+OEM
+________________________________________
+Solución aplicada
+1. Eliminación de entradas UEFI (caso real)
+ ✔ Se eliminaron:
+•	Manjaro 
+•	Fedora (2 entradas) 
+
+
+________________________________________
+ 2. Limpieza de archivos EFI
+Ubicación:
+S:\EFI
+Comandos ejecutados:
+ 
+ Directorios conservados:
+•	Microsoft 
+•	Boot 
+•	OEM 
+________________________________________
+3. Restauración del arranque de Windows
+ 
+
+________________________________________
+4. Verificación final
+bcdedit /enum firmware
+Resultado esperado:
+•	Solo Windows Boot Manager 
+•	Dispositivos EFI (USB, red, etc.) 
+________________________________________
+ Resultado obtenido
+•	Eliminación total de Fedora y Manjaro 
+•	Arranque limpio directo a Windows 
+•	Acceso normal a BIOS (sin punto blanco) 
+•	Sistema estable 
+________________________________________
+Conclusión técnica
+El problema fue causado por residuos de GRUB en la partición EFI y entradas inválidas en el firmware UEFI.
+La solución consistió en:
+•	Eliminar entradas UEFI manualmente 
+•	Limpiar la partición EFI 
+•	Restaurar el gestor de arranque de Windows 
+________________________________________
+Observación final
+Este procedimiento permite:
+•	Reparar el arranque sin formatear 
+•	Recuperar control total del sistema UEFI 
+•	Evitar conflictos entre sistemas operativos eliminados
